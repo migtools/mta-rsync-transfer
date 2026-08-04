@@ -46,7 +46,7 @@ COPY --from=blockrsync-builder /workspace/proxy /proxy
 COPY --from=blockrsync-builder /workspace/rclone /usr/local/bin/rclone
 
 # Smoke test — verify binaries are functional
-RUN /blockrsync --help > /dev/null 2>&1 && \
-    rclone --version > /dev/null 2>&1 && \
-    rsync --version > /dev/null 2>&1
+RUN /blockrsync --help && \
+    rclone --version && \
+    rsync --version
 
