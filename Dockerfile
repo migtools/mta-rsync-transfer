@@ -27,6 +27,7 @@ RUN go mod download
 # Build
 RUN go build -o blockrsync ./cmd/blockrsync/main.go
 RUN go build -o proxy ./cmd/proxy/main.go
+RUN go build -o rclone ./cmd/rclone/main.go
 
 ######################################################################
 # Final container
@@ -42,4 +43,5 @@ WORKDIR /
 ##### blockrsync
 COPY --from=blockrsync-builder /workspace/blockrsync /blockrsync
 COPY --from=blockrsync-builder /workspace/proxy /proxy
+COPY --from=blockrsync-builder /workspace/rclone /usr/local/bin/rclone
 
