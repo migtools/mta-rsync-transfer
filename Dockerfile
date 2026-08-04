@@ -1,6 +1,6 @@
 ######################################################################
 # Establish a common builder image for all golang-based images
-FROM docker.io/golang:1.21 as golang-builder
+FROM docker.io/golang:1.25 AS golang-builder
 USER root
 WORKDIR /workspace
 # We don't vendor modules. Enforce that behavior
@@ -25,9 +25,9 @@ COPY ./pkg/. pkg/
 RUN go mod download
 
 # Build
-RUN go build -o blockrsync ./cmd/blockrsync/main.go
-RUN go build -o proxy ./cmd/proxy/main.go
-RUN go build -o rclone ./cmd/rclone/main.go
+RUN CGO_ENABLED=0 go build -o blockrsync ./cmd/blockrsync/main.go
+RUN CGO_ENABLED=0 go build -o proxy ./cmd/proxy/main.go
+RUN CGO_ENABLED=0 go build -o rclone ./cmd/rclone/main.go
 
 ######################################################################
 # Final container
