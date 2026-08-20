@@ -5,11 +5,6 @@ USER root
 WORKDIR /workspace
 # We don't vendor modules. Enforce that behavior
 ENV GOFLAGS=-mod=readonly
-ENV GO111MODULE=on
-ARG TARGETOS
-ARG TARGETARCH
-ENV GOOS=${TARGETOS:-linux}
-ENV GOARCH=${TARGETARCH}
 
 ######################################################################
 # Build block binary
@@ -31,12 +26,11 @@ RUN CGO_ENABLED=0 go build -o rclone ./cmd/rclone/main.go
 ######################################################################
 # Final container
 FROM registry.redhat.io/ubi9/ubi-minimal:latest
-RUN microdnf update -y
 RUN microdnf -y install openssh-server stunnel rsync nmap && microdnf clean all
 COPY sshd_config /etc/ssh/sshd_config
 COPY stunnel.conf /etc/stunnel/stunnel.conf
 COPY LICENSE /licenses/
-USER 65534:65534
+USER 1001
 
 WORKDIR /
 
